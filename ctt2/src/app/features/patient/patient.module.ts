@@ -7,12 +7,16 @@ import { PatientNavbarComponent } from './components/patient-navbar/patient-navb
 import { PatientsListComponent } from './components/patients-list/patients-list.component';
 import { PatientComponent } from './components/patient/patient.component';
 import { NewPatientComponent } from './components/new-patient/new-patient.component';
+import { EditPatientComponent } from './components/edit-patient/edit-patient.component';
 
 
 
 const routes: Routes = [
   {
     path: 'newPt', component: NewPatientComponent
+  },
+  {
+    path: 'editPt', component: EditPatientComponent
   },
   {
     path: '', component: PatientComponent,
@@ -28,7 +32,8 @@ NgModule({
     PatientNavbarComponent,
     PatientsListComponent,
     PatientComponent,
-    NewPatientComponent
+    NewPatientComponent,
+    EditPatientComponent
   ],
   imports: [
     SharedModule,

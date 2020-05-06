@@ -8,7 +8,14 @@ nhsNo: string;
 cpmsNo: string;
 notes: string;
 isOpen: boolean;
-locality: string;
+localityId: number;
 }
+
+export interface PtEditDTO {
+    patientId: number;
+    notes: string;
+    isOpen: boolean;
+    localityId: number;
+    }
 
 

@@ -6,20 +6,20 @@ import { AppState } from '@app/store/app-store.module';
 import { Locality } from '@app/models/locality';
 import { Observable, from, throwError } from 'rxjs';
 import { getLocalityList } from '@app/store/selectors/list.selectors';
-import { Patient } from '@app/models/patient';
+import { Patient, PtEditDTO } from '@app/models/patient';
 import { PatientService } from '@app/services/patient.service';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, tap, map, filter } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute, NavigationStart } from '@angular/router';
 
 
 @Component({
-  selector: 'app-new-patient',
-  templateUrl: './new-patient.component.html',
-  styleUrls: ['./new-patient.component.scss']
+  selector: 'app-edit-patient',
+  templateUrl: './edit-patient.component.html',
+  styleUrls: ['./edit-patient.component.scss']
 })
-export class NewPatientComponent implements OnInit {
+export class EditPatientComponent implements OnInit {
 
   ptForm: FormGroup;
 
@@ -29,6 +29,8 @@ export class NewPatientComponent implements OnInit {
   NHSNoValidator = /^(\d{3}) ?(\d{3}) ?(\d{4})$/g;
   DobValidator = /^(\d{2})\/(\d{2})\/(\d{4})/g;
   errors: any;
+  state: any;
+  activatedRoute: any;
 
 
 
@@ -39,7 +41,7 @@ export class NewPatientComponent implements OnInit {
     private snackBar: MatSnackBar,
     private router: Router,
   ) {
-
+    this.state = this.router.getCurrentNavigation().extras.state.data;
   }
 
   ngOnInit(): void {
@@ -52,19 +54,26 @@ export class NewPatientComponent implements OnInit {
 
   reactiveForm() {
     this.ptForm = this.fb.group({
-      firstName: ['', [Validators.required, validateWhitespace]],
-      lastName: ['', [Validators.required, validateWhitespace]],
-      dob: ['', [Validators.required]],
-      nhsNo: ['', [Validators.required, Validators.pattern(this.NHSNoValidator)]],
-      cpmsNo: [''],
-      localityId: ['', [Validators.required]],
-      notes: ['']
+      patientId: [this.state.patientId],
+      firstName: [this.state.firstName, [Validators.required, validateWhitespace]],
+      lastName: [this.state.lastName, [Validators.required, validateWhitespace]],
+      dob: [this.state.dob, [Validators.required]],
+      nhsNo: [this.state.nhsNo, [Validators.required, Validators.pattern(this.NHSNoValidator)]],
+      cpmsNo: [this.state.cpmsNo],
+      localityId: [this.state.localityId, [Validators.required]],
+      notes: [this.state.notes],
+      isOpen: [this.state.isOpen]
     });
   }
 
-  save(newPt: Patient) {
-    newPt.isOpen = true;
-    const res = this.patientService.saveNewPt(newPt).subscribe(
+  update(data: Patient) {
+    const editData = {
+      patientId: data.patientId,
+      localityId: data.localityId,
+      notes: data.notes,
+      isOpen: data.isOpen
+    };
+    const res = this.patientService.Update(editData).subscribe(
       result => {
         // Handle result
         console.log(result);
@@ -79,7 +88,7 @@ export class NewPatientComponent implements OnInit {
       () => {
         // 'onCompleted' callback.
         // No errors, route to new page here
-        this.snackBar.open('Patient successfully saved to Database', 'Close', {
+        this.snackBar.open('Patient successfully updated to Database', 'Close', {
           duration: 3000,
           verticalPosition: 'top'
         });
@@ -90,5 +99,5 @@ export class NewPatientComponent implements OnInit {
 
   cancel() {
     this.router.navigateByUrl('/patients');
-   }
+  }
 }
