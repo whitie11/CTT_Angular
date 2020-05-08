@@ -5,6 +5,8 @@ import { Observable } from 'rxjs';
 import { MatSort } from '@angular/material/sort';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
+import { Router, NavigationStart, ActivatedRoute } from '@angular/router';
+import { filter, map } from 'rxjs/operators';
 @Component({
   selector: 'app-patients-list',
   templateUrl: './patients-list.component.html',
@@ -26,11 +28,17 @@ export class PatientsListComponent implements OnInit {
   pts: Patient[];
 
   dataSource = new MatTableDataSource(this.pts);
-
+  filter: any;
+  state$: any;
+  navParams: any;
 
   constructor(
-    private patientService: PatientService
-  ) { }
+    private patientService: PatientService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {
+
+  }
 
   displayedColumns = [
     'id',
@@ -52,6 +60,17 @@ export class PatientsListComponent implements OnInit {
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
       this.table.dataSource = this.dataSource;
+      this.state$ = this.route.paramMap
+        .pipe(map(() => window.history.state)).subscribe((s) => {
+          this.navParams = s;
+        });
+
+
+      if (this.navParams.data) {
+        this.filter = this.navParams.data;
+        this.doFilter(this.navParams.data);
+       }
+
     });
   }
 

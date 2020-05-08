@@ -92,7 +92,7 @@ export class EditPatientComponent implements OnInit {
           duration: 3000,
           verticalPosition: 'top'
         });
-        this.router.navigateByUrl('/patients');
+        this.router.navigateByUrl('/patients', {state: { data: data.nhsNo }});
       }
     );
   }
