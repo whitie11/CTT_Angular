@@ -1,0 +1,20 @@
+<div>
+    <form [formGroup]="apptForm" (ngSubmit)="save(apptForm.value)" autocomplete="off">
+        <mat-card class="newPt-card">
+            <mat-card-title>
+               <mat-toolbar color="accent">
+                    <span>New Appointment Form</span>
+                </mat-toolbar> 
+            </mat-card-title>
+
+            <mat-card-content>
+            Selected Clinic: {{selectedClinic}} {{dateStr}} {{timeStr}}
+            </mat-card-content>
+            <mat-card-content>  
+                Content2 
+               </mat-card-content>
+
+
+        </mat-card>
+    </form>
+</div>

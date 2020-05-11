@@ -1,8 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Clinic } from '@app/models/clinic';
+import { Appt } from '@app/models/appt';
 import { ListService } from '@app/services/list.service';
 import { Observable } from 'rxjs';
-import { DiaryRow, DiaryReqDTO, DiaryListItem } from '@app/models/diaryListItem';
+import { DiaryRow, DiaryReqDTO, DiaryListItem, TimeSlot } from '@app/models/diaryListItem';
 import { MatTableDataSource, MatTable } from '@angular/material/table';
 import { DiaryState } from '../../state/diary.reducer';
 import { Store } from '@ngrx/store';
@@ -80,7 +81,7 @@ export class DiaryComponent implements OnInit {
 
   loading$: Observable<boolean>;
   loading: boolean;
-  Object;
+
 
   diaryControls: DiaryControls;
 
@@ -214,9 +215,28 @@ export class DiaryComponent implements OnInit {
     } else { return 'false'; }
   }
 
-  showEdit(item: DiaryListItem) {
+  showEdit(item: DiaryListItem, group: string, ts: TimeSlot) {
     this.saveDiaryControls();
-    this.router.navigate(['/diaries/appt_edit', item.apptId]);
+    if (item.patientId !== 0) {
+      this.router.navigate(['/diaries/appt_edit']);
+    }
+    else {
+      const newAppt: Appt = {
+        apptId: 0,
+        date: this.date,
+        timeSlot: ts.slot,
+        timeSlotId: ts.timeSlotId,
+        clinicId: this.selectedClinicId,
+        notes: '',
+        patientId: 0,
+        stageId: 0,
+        typeId: 0,
+        clinicGroup: group
+      };
+
+      this.router.navigateByUrl('/diaries/appt_new', { state: { appt: newAppt } });
+    }
+
   }
 
 }

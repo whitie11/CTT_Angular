@@ -6,7 +6,7 @@ import { AppState } from '@app/store/app-store.module';
 import { Locality } from '@app/models/locality';
 import { Observable, from, throwError } from 'rxjs';
 import { getLocalityList } from '@app/store/selectors/list.selectors';
-import { Patient, PtEditDTO } from '@app/models/patient';
+import { Patient, PtEditDTO, PtNewDTO } from '@app/models/patient';
 import { PatientService } from '@app/services/patient.service';
 import { catchError, tap, map, filter } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -39,7 +39,7 @@ export class EditPatientComponent implements OnInit {
     private store: Store<AppState>,
     private patientService: PatientService,
     private snackBar: MatSnackBar,
-    private router: Router,
+    private router: Router
   ) {
     this.state = this.router.getCurrentNavigation().extras.state.data;
   }
@@ -50,23 +50,26 @@ export class EditPatientComponent implements OnInit {
     this.localities$.subscribe(l => this.localities = l);
   }
 
-
+  getDateString(date: Date) {
+    const d = new Date(date);
+    return d.toLocaleDateString();
+  }
 
   reactiveForm() {
     this.ptForm = this.fb.group({
       patientId: [this.state.patientId],
-      firstName: [this.state.firstName, [Validators.required, validateWhitespace]],
-      lastName: [this.state.lastName, [Validators.required, validateWhitespace]],
-      dob: [this.state.dob, [Validators.required]],
-      nhsNo: [this.state.nhsNo, [Validators.required, Validators.pattern(this.NHSNoValidator)]],
+      firstName: [this.state.firstName],
+      lastName: [this.state.lastName],
+      dob: [this.getDateString(this.state.dob)],
+      nhsNo: [this.state.nhsNo],
       cpmsNo: [this.state.cpmsNo],
-      localityId: [this.state.localityId, [Validators.required]],
+      localityId: [this.state.locality.localityId, [Validators.required]],
       notes: [this.state.notes],
       isOpen: [this.state.isOpen]
     });
   }
 
-  update(data: Patient) {
+  update(data: PtNewDTO) {
     const editData = {
       patientId: data.patientId,
       localityId: data.localityId,
@@ -92,7 +95,7 @@ export class EditPatientComponent implements OnInit {
           duration: 3000,
           verticalPosition: 'top'
         });
-        this.router.navigateByUrl('/patients', {state: { data: data.nhsNo }});
+        this.router.navigateByUrl('/patients', { state: { data: data.nhsNo } });
       }
     );
   }

@@ -33,11 +33,11 @@ color="primary"
 labelPosition="before" 
 (change)="showCols()" 
 [(ngModel)] = "setB">
-Clinic 2
+Clinic B
 </mat-checkbox>
 
 <mat-checkbox class="diaryControls" color="primary"
-labelPosition="before" (change)="showCols()" [(ngModel)] = "setC">Clinic 3</mat-checkbox>
+labelPosition="before" (change)="showCols()" [(ngModel)] = "setC">Clinic C</mat-checkbox>
 
 <div *ngIf="loading$ | async">
   <mat-spinner style="margin:0 auto;" ></mat-spinner>
@@ -61,7 +61,7 @@ labelPosition="before" (change)="showCols()" [(ngModel)] = "setC">Clinic 3</mat-
       matTooltip={{row?.setA?.notes}}
       matTooltipPosition="right"
       matTooltipDisabled={{showToolTipA(row)}}
-      (click)="showEdit(row?.setA)"
+      (click)="showEdit(row?.setA,'A',row.timeSlot)"
       >
       {{row.setA?.patientName}}
       </td>
@@ -82,6 +82,7 @@ labelPosition="before" (change)="showCols()" [(ngModel)] = "setC">Clinic 3</mat-
       matTooltip={{row?.setB?.notes}}
       matTooltipPosition="right"
       matTooltipDisabled={{showToolTipB(row)}}
+      (click)="showEdit(row?.setB,'B',row.timeSlot)"
       >
       {{row.setB?.patientName}}</td>
     </ng-container>
@@ -101,6 +102,7 @@ labelPosition="before" (change)="showCols()" [(ngModel)] = "setC">Clinic 3</mat-
       matTooltip={{row?.setC?.notes}}
       matTooltipPosition="right"
       matTooltipDisabled={{showToolTipC(row)}}
+      (click)="showEdit(row?.setC,'C',row.timeSlot)"
       >
       {{row.setC?.patientName}}</td>
     </ng-container>
@@ -121,18 +123,18 @@ labelPosition="before" (change)="showCols()" [(ngModel)] = "setC">Clinic 3</mat-
     <!-- Header row first group -->
     <ng-container matColumnDef="header-row-first-group">
       <th mat-header-cell *matHeaderCellDef [attr.colspan]="2" [ngStyle]="{'background-color':'#efe5fd'}">
-        Clinic 1
+        Clinic A
       </th>
     </ng-container>
 
     <!-- Header row second group -->
     <ng-container matColumnDef="header-row-second-group">
-      <th mat-header-cell *matHeaderCellDef [attr.colspan]="2" [ngStyle]="{'background-color':'#e3f2fd'}"> Clinic 2 </th>
+      <th mat-header-cell *matHeaderCellDef [attr.colspan]="2" [ngStyle]="{'background-color':'#e3f2fd'}"> Clinic B </th>
     </ng-container>
 
     <!-- Header row third group -->
     <ng-container matColumnDef="header-row-third-group">
-      <th mat-header-cell *matHeaderCellDef [attr.colspan]="2" [ngStyle]="{'background-color':'#ffebee'}"> Clinic 3</th>
+      <th mat-header-cell *matHeaderCellDef [attr.colspan]="2" [ngStyle]="{'background-color':'#ffebee'}"> Clinic C</th>
     </ng-container>
 
     <tr mat-header-row

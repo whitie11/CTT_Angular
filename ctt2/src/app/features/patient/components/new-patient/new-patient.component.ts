@@ -6,7 +6,7 @@ import { AppState } from '@app/store/app-store.module';
 import { Locality } from '@app/models/locality';
 import { Observable, from, throwError } from 'rxjs';
 import { getLocalityList } from '@app/store/selectors/list.selectors';
-import { Patient } from '@app/models/patient';
+import { Patient, PtNewDTO } from '@app/models/patient';
 import { PatientService } from '@app/services/patient.service';
 import { catchError, tap } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -62,7 +62,7 @@ export class NewPatientComponent implements OnInit {
     });
   }
 
-  save(newPt: Patient) {
+  save(newPt: PtNewDTO) {
     newPt.isOpen = true;
     const res = this.patientService.saveNewPt(newPt).subscribe(
       result => {

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams, HttpErrorResponse } from '@angular/common/http';
 import { environment } from '@env/environment';
 import { Observable } from 'rxjs';
-import { Patient, PtEditDTO } from '@app/models/patient';
+import { Patient, PtEditDTO, PtNewDTO } from '@app/models/patient';
 import { catchError, tap } from 'rxjs/operators';
 
 @Injectable({
@@ -36,7 +36,7 @@ export class PatientService {
     return result;
   }
 
-  public saveNewPt(newPt: Patient): Observable<Patient> {
+  public saveNewPt(newPt: PtNewDTO): Observable<Patient> {
     const url = this.api + 'saveNewPt';
     return this.http.post<Patient>(url, newPt)
       .pipe(

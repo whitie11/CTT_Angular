@@ -10,16 +10,24 @@ import { EffectsModule } from '@ngrx/effects';
 import * as fromDiary from './state';
 import { DiaryEffects } from './state/diary.effects';
 import { ApptEditComponent } from './components/appt-edit/appt-edit.component';
+import { ApptNewComponent } from './components/appt-new/appt-new.component';
 
 
 
 const routes: Routes = [
   {
-    path: 'appt_edit/:Id', component: ApptEditComponent,
+    path: 'appt_edit', component: ApptEditComponent,
     // children: [
     //   { path: '',  }
     // ]
   },
+  {
+    path: 'appt_new', component: ApptNewComponent,
+    // children: [
+    //   { path: '',  }
+    // ]
+  },
+
   {
     path: '', component: DiaryComponent,
     children: [
@@ -33,7 +41,8 @@ const routes: Routes = [
 NgModule({
   declarations: [
     DiaryComponent,
-    ApptEditComponent
+    ApptEditComponent,
+    ApptNewComponent
   ],
   imports: [
     SharedModule,

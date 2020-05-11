@@ -59,6 +59,14 @@ export class PatientsListComponent implements OnInit {
       this.dataSource = new MatTableDataSource(list);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
+      this.dataSource.sortingDataAccessor = (item, property) => {
+        if (property === 'locality'){
+          return item.locality.name;
+        } else {
+          return item[property];
+        }
+};
+
       this.table.dataSource = this.dataSource;
       this.state$ = this.route.paramMap
         .pipe(map(() => window.history.state)).subscribe((s) => {
@@ -69,7 +77,7 @@ export class PatientsListComponent implements OnInit {
       if (this.navParams.data) {
         this.filter = this.navParams.data;
         this.doFilter(this.navParams.data);
-       }
+      }
 
     });
   }
