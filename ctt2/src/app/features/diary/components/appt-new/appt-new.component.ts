@@ -52,7 +52,7 @@ export class ApptNewComponent implements OnInit {
     this.clinicList$.subscribe(c => this.clinicList = c);
     this.apptType$ = this.listService.getApptTypes();
     this.apptType$.subscribe(t => this.apptType = t);
-   }
+  }
 
   ngOnInit(): void {
 
@@ -72,8 +72,8 @@ export class ApptNewComponent implements OnInit {
   reactiveForm() {
     this.apptForm = this.fb.group({
       apptId: [0],
-      date: [this.state.date],
-      timeSlotId: [this.state.timeSlot],
+      date: [this.changeDate(this.state.date)],
+      timeSlotId: [this.state.timeSlotId],
       clinicId: [this.state.clinicId],
       notes: [''],
       patientId: ['', [Validators.required]],
@@ -83,15 +83,21 @@ export class ApptNewComponent implements OnInit {
     });
   }
 
-  save(newAppt: Appt){
-   // newPt.isOpen = true;
+  changeDate(fromDate: Date) {
+    const UTCDate = Date.UTC(fromDate.getFullYear(), fromDate.getMonth(), fromDate.getDate());
+
+    return new Date(UTCDate);
+  }
+
+  save(newAppt: Appt) {
+    // newPt.isOpen = true;
     const res = this.diaryService.saveAppt(newAppt).subscribe(
       result => {
         // Handle result
-      //  console.log(result);
+        //  console.log(result);
       },
       error => {
-       // this.errors = error;
+        // this.errors = error;
         this.snackBar.open(error, 'Close', {
           duration: 3000,
           verticalPosition: 'top'
@@ -109,7 +115,7 @@ export class ApptNewComponent implements OnInit {
     );
   }
 
-  cancel(){
+  cancel() {
     this.router.navigateByUrl('/diaries');
   }
 

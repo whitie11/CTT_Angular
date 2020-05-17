@@ -185,7 +185,7 @@ export class DiaryComponent implements OnInit {
     if (item.setB === null) {
       return { 'background-color': '#e3f2fd' };
     }
-    if (item.setB.notes != null) {
+    if (item.setB != null && item.setB.notes != null && item.setB.notes.length > 0) {
       return { 'background-color': '#e3f2fd', color: '#ff0000' };
     } else {
       return { 'background-color': '#e3f2fd' };
