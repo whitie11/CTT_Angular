@@ -67,7 +67,7 @@ export class NewPatientComponent implements OnInit {
     const res = this.patientService.saveNewPt(newPt).subscribe(
       result => {
         // Handle result
-        console.log(result);
+      //  console.log(result);
       },
       error => {
         this.errors = error;

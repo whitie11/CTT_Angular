@@ -7,6 +7,12 @@ import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { DiaryState } from '../../state/diary.reducer';
 import { getClinicList } from '@app/store/selectors/list.selectors';
+import { ClinicListDTO } from '@app/models/clinicListDTO';
+import { PatientService } from '@app/services/patient.service';
+import { ApptTypes } from '@app/models/apptTyes';
+import { ListService } from '@app/services/list.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { DiaryService } from '@app/services/DIaryService';
 
 @Component({
   selector: 'app-appt-new',
@@ -24,18 +30,32 @@ export class ApptNewComponent implements OnInit {
   dateStr: string;
   timeStr: string;
 
+  clinicList$: Observable<ClinicListDTO[]>;
+  clinicList: ClinicListDTO[];
+
+  apptType$: Observable<ApptTypes[]>;
+  apptType: ApptTypes[];
+
   constructor(
     private router: Router,
     private fb: FormBuilder,
     private store: Store<DiaryState>,
+    private patientService: PatientService,
+    private diaryService: DiaryService,
+    private listService: ListService,
+    private snackBar: MatSnackBar
   ) {
     this.state = this.router.getCurrentNavigation().extras.state.appt;
     this.clinics$ = this.store.select(getClinicList);
     this.clinics$.subscribe(l => this.clinics = l);
-
+    this.clinicList$ = this.patientService.getClinicList(this.state.clinicId);
+    this.clinicList$.subscribe(c => this.clinicList = c);
+    this.apptType$ = this.listService.getApptTypes();
+    this.apptType$.subscribe(t => this.apptType = t);
    }
 
   ngOnInit(): void {
+
     this.reactiveForm();
     const cl = this.clinics.find(c => c.clinicId === this.state.clinicId);
     this.selectedClinic = cl.clinicName + '(' + this.state.clinicGroup + ')';
@@ -53,19 +73,44 @@ export class ApptNewComponent implements OnInit {
     this.apptForm = this.fb.group({
       apptId: [0],
       date: [this.state.date],
-
       timeSlotId: [this.state.timeSlot],
       clinicId: [this.state.clinicId],
       notes: [''],
       patientId: ['', [Validators.required]],
       stageId: [1],
       typeId: ['', [Validators.required]],
-      clinicGroup: [this.state.group]
+      clinicGroup: [this.state.clinicGroup]
     });
   }
 
   save(newAppt: Appt){
+   // newPt.isOpen = true;
+    const res = this.diaryService.saveAppt(newAppt).subscribe(
+      result => {
+        // Handle result
+      //  console.log(result);
+      },
+      error => {
+       // this.errors = error;
+        this.snackBar.open(error, 'Close', {
+          duration: 3000,
+          verticalPosition: 'top'
+        });
+      },
+      () => {
+        // 'onCompleted' callback.
+        // No errors, route to new page here
+        this.snackBar.open('Appointment successfully saved to Database', 'Close', {
+          duration: 3000,
+          verticalPosition: 'top'
+        });
+        this.router.navigateByUrl('/diaries');
+      }
+    );
+  }
 
+  cancel(){
+    this.router.navigateByUrl('/diaries');
   }
 
 }

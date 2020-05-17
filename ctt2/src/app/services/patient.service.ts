@@ -4,6 +4,7 @@ import { environment } from '@env/environment';
 import { Observable } from 'rxjs';
 import { Patient, PtEditDTO, PtNewDTO } from '@app/models/patient';
 import { catchError, tap } from 'rxjs/operators';
+import { ClinicListDTO } from '@app/models/clinicListDTO';
 
 @Injectable({
   providedIn: 'root'
@@ -33,6 +34,12 @@ export class PatientService {
   public getAllPts(): Observable<Patient[]> {
     const url = this.api + 'getAll';
     const result = this.http.get<Patient[]>(url);
+    return result;
+  }
+
+  public getClinicList(localityId: number): Observable<ClinicListDTO[]> {
+    const url = this.api + 'getClinicList/' + localityId;
+    const result = this.http.get<ClinicListDTO[]>(url);
     return result;
   }
 

@@ -7,7 +7,10 @@ export enum ListActionTypes {
     LOAD_CLINIC_LIST_FAIL = '[list] load clinicList fail',
     LOAD_LOCALITY_LIST = '[list] load localityList',
     LOAD_LOCALITY_LIST_SUCCESS = '[list] load localityList success',
-    LOAD_LOCALITY_LIST_FAIL = '[list] load localityList fail'
+    LOAD_LOCALITY_LIST_FAIL = '[list] load localityList fail',
+    LOAD_APPT_TYPE = '[list] load apptType',
+    LOAD_APPT_TYPE_SUCCESS = '[list] load apptType success',
+    LOAD_APPT_TYPE_FAIL = '[list] load apptType fail'
 }
 
 export class LoadClinicList implements Action {
@@ -32,10 +35,24 @@ export class LoadLocalityListFail implements Action {
     readonly type = ListActionTypes.LOAD_LOCALITY_LIST_FAIL;
 }
 
+export class LoadApptType implements Action {
+    readonly type = ListActionTypes.LOAD_APPT_TYPE;
+}
+export class LoadApptTypeSuccess implements Action {
+    readonly type = ListActionTypes.LOAD_APPT_TYPE_SUCCESS;
+    constructor(public payload: any){}
+}
+export class LoadApptTypeFail implements Action {
+    readonly type = ListActionTypes.LOAD_APPT_TYPE_FAIL;
+}
+
 export type ListAction =
 LoadClinicList |
 LoadClinicListSuccess |
 LoadClinicListFail |
 LoadLocalityList |
 LoadLocalityListSuccess |
-LoadLocalityListFail;
+LoadLocalityListFail |
+LoadApptType |
+LoadApptTypeSuccess |
+LoadApptTypeFail;

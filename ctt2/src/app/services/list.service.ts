@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { Patient } from '@app/models/patient';
 import { Clinic } from '@app/models/clinic';
 import { Locality } from '@app/models/locality';
+import { ApptTypes } from '@app/models/apptTyes';
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +25,12 @@ export class ListService {
   public  getLocalities(): Observable<Locality[]> {
     const url = this.api + 'getLocalities' ;
     const result = this.http.get<Locality[]>(url);
+    return  result;
+  }
+
+  public  getApptTypes(): Observable<ApptTypes[]> {
+    const url = this.api + 'getApptTypes' ;
+    const result = this.http.get<ApptTypes[]>(url);
     return  result;
   }
 

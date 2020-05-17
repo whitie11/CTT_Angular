@@ -4,7 +4,15 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ListService } from '@app/services/list.service';
 import { Observable, of } from 'rxjs';
 import { Action } from '@ngrx/store';
-import { ListActionTypes, LoadClinicListSuccess, LoadClinicListFail, LoadLocalityListSuccess, LoadLocalityListFail } from '../actions/list.actions';
+import {
+    ListActionTypes,
+    LoadClinicListSuccess,
+    LoadClinicListFail,
+    LoadLocalityListSuccess,
+    LoadLocalityListFail,
+    LoadApptTypeSuccess,
+    LoadApptTypeFail
+} from '../actions/list.actions';
 import { mergeMap, map, catchError } from 'rxjs/operators';
 
 
@@ -52,4 +60,24 @@ export class ListEffects {
             )
         )
     );
+
+    @Effect()
+    loadApptTypes$: Observable<Action> = this.action$.pipe(
+        ofType(ListActionTypes.LOAD_APPT_TYPE),
+        mergeMap(action =>
+            this.listService.getApptTypes().pipe(
+                map(types => new LoadApptTypeSuccess(types)),
+                catchError(err => {
+                    this.snackBar.open(err.statusText, 'Close', {
+                        duration: 3000,
+                        verticalPosition: 'top'
+                    });
+                    return of(new LoadApptTypeFail());
+                })
+            )
+        )
+    );
+
+
+
 }

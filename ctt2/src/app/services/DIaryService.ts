@@ -5,6 +5,8 @@ import { Observable } from 'rxjs';
 import { Patient } from '@app/models/patient';
 import { Clinic } from '@app/models/clinic';
 import { DiaryRow, DiaryReqDTO } from '@app/models/diaryListItem';
+import { Appt } from '@app/models/appt';
+import { tap, catchError } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -20,4 +22,18 @@ export class DiaryService {
     const result = this.http.post<DiaryRow[]>(url, data);
     return  result;
   }
+
+  public saveAppt(newAppt: Appt): Observable<Appt> {
+    const url = this.api + 'saveAppt';
+    return this.http.post<Appt>(url, newAppt)
+      .pipe(
+        tap(data => console.log('server data:', data)),
+        catchError((err) => {
+          console.log('Error from server ', err);
+          throw err;
+        }
+      ));
+
+  }
+
 }

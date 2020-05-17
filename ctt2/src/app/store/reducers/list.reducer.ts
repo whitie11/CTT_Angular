@@ -8,13 +8,17 @@ export interface ListState {
     listLoading: boolean;
     localityList: Locality[];
     locListLoading: boolean;
+    apptTypeList: Locality[];
+    apptTypeLoading: boolean;
 }
 
 const initialState: ListState = {
     clinicList: null,
     listLoading: false,
     localityList: null,
-    locListLoading: false
+    locListLoading: false,
+    apptTypeList: null,
+    apptTypeLoading: false
 };
 
 export function listReducer(state = initialState, action: ListAction): ListState {
@@ -31,6 +35,12 @@ export function listReducer(state = initialState, action: ListAction): ListState
             return { ...state, locListLoading: false, localityList: action.payload };
         case ListActionTypes.LOAD_LOCALITY_LIST_FAIL:
             return { ...state, locListLoading: false };
+        case ListActionTypes.LOAD_APPT_TYPE:
+            return { ...state, apptTypeLoading: true };
+        case ListActionTypes.LOAD_APPT_TYPE_SUCCESS:
+            return { ...state, apptTypeLoading: false, apptTypeList: action.payload };
+        case ListActionTypes.LOAD_APPT_TYPE_FAIL:
+            return { ...state, apptTypeLoading: false };
         default:
             return state;
     }

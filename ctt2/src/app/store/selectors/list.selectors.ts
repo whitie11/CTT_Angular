@@ -16,3 +16,9 @@ export const getLocalityList = createSelector(selectListState,
 export const getLocListLoading = createSelector(selectListState,
     (state: ListState) => state.locListLoading);
 
+export const getApptTypes = createSelector(selectListState,
+    (state: ListState) => state.apptTypeList);
+
+export const getApptTypeLoading = createSelector(selectListState,
+    (state: ListState) => state.apptTypeLoading);
+
